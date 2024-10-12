@@ -1,0 +1,193 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    background-color: #060720;
+}
+
+:root {
+    --t: 4s;
+    --q: 3;
+    /* Given */
+    --n: 2.3px;
+    /* Original radius */
+    --s: 5px;
+    /* Spacing between shapes */
+    --w1: 20px;
+    /* Outer long side W */
+    --w2: calc(var(--w1) - (2 * var(--n)));
+    --h2: calc(var(--w2) / var(--q));
+    --h1: calc(var(--h2) + (2 * var(--n)));
+    --r1: calc(2 * var(--n));
+    --r2: calc(var(--n));
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    /* Stack full-rows vertically */
+    justify-content: center;
+    /* Vertically center rows */
+    width: 100%;
+    height: 100%;
+}
+
+.full-row {
+    display: flex;
+    /* Align unitary-blocks horizontally */
+    flex-direction: row;
+    width: 100%;
+    /* Full width of the container */
+    justify-content: center;
+    /* Horizontally center */
+    overflow: hidden;
+}
+
+.unitary-block {
+    display: flex;
+    flex-direction: column;
+    /* Stack patterns vertically */
+    flex: 1;
+    /* Allow blocks to grow equally */
+    overflow: hidden;
+}
+
+/* Each pattern holds 4 X-shapes in a horizontal row */
+.pattern {
+    display: flex; /* Align x-shapes horizontally */
+    justify-content: space-around; /* Center x-shapes within the pattern */
+}
+
+/* X-shape settings */
+.x-shape {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    position: relative;
+    width: var(--w1); /* Add spacing to width */
+    height: var(--w1); /* Add spacing to height */
+    will-change: transform, opacity; /* Hints the browser to optimize these properties */
+
+}
+
+/* Rectangle Styles */
+.outer,
+.inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(45deg); /* Center and rotate */
+}
+
+.outer {
+    width: var(--w1);
+    height: var(--h1);
+    border-radius: var(--r1);
+}
+
+.inner {
+    width: var(--w2);
+    height: var(--h2);
+    border-radius: var(--r2);
+}
+
+.r2 {
+    transform: translate(-50%, -50%) rotate(-45deg); /* Adjusted rotation for r2 */
+}
+
+/* Colors for X shapes */
+.pink .outer   {background-color: #FF00BF;}
+.pink .inner   {background-color: #8C0069;}
+.yellow .outer {background-color: #FFBF00;}
+.yellow .inner {background-color: #8C6900;}
+.green .outer  {background-color: #00FF40;}
+.green .inner  {background-color: #008C23;}
+.blue .outer   {background-color: #0040FF;}
+.blue .inner   {background-color: #00238C;}
+
+/* Apply the same keyframes as before */
+@keyframes colorCycleOuter {
+    0% {background-color: #FF00BF}
+
+    /* Pink */
+    25% {background-color: #FFBF00;}
+
+    /* Yellow */
+    50% {background-color: #00FF40;}
+
+    /* Green */
+    75% {background-color: #0040FF;}
+
+    /* Blue */
+    100% {background-color: #FF00BF;}
+
+    /* Back to Pink */
+}
+
+@keyframes colorCycleInner {
+    0%   {background-color: #8C0069;} /* Pink Inner */
+    25%  {background-color: #8C6900;} /* Yellow Inner */
+    50%  {background-color: #008C23;} /* Green Inner */
+    75%  {background-color: #00238C;} /* Blue Inner */
+    100% {background-color: #8C0069;} /* Back to Pink Inner */
+}
+
+/* Outer and inner animation settings for all shapes */
+.x-shape .outer,
+.x-shape .inner {
+    animation-duration: var(--t);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* Pink shapes */
+.pink .outer, .yellow .outer, .green .outer, .blue .outer  {
+    animation-name: colorCycleOuter;
+}
+
+.pink .inner, .yellow .inner, .green .inner, .blue .inner {
+    animation-name: colorCycleInner;
+}
+
+/* Stagger the animation delays */
+
+/* Shapes starting at 25% (5s delay for a 20s cycle) */
+.pink .outer,
+.pink .inner {
+    animation-delay: 0s;
+}
+
+/* Shapes starting at 50% (10s delay) */
+.yellow .outer,
+.yellow .inner {
+    animation-delay: calc(var(--t) * 3 / -4);
+}
+
+/* Shapes starting at 75% (15s delay) */
+.green .outer,
+.green .inner {
+    animation-delay: calc(var(--t) / -2);
+}
+
+/* Shapes starting at 0% (no delay) */
+.blue .outer,
+.blue .inner {
+    animation-delay: calc(var(--t) / -4);
+    /* No delay, starts immediately */
+}
